@@ -65,14 +65,14 @@ int check_view(int argc,char* argv[])
       frame0 = cam0.readImage();
       if(frame0.empty())
 	{
-	  cout << "Can't get image from cam0." << endl;
+	  cout << "Can't get image from cam." << endl;
 	  return 0;
 	}
       
       frame1 = cam1.readImage();
       if(frame1.empty())
 	{
-	  cout << "Can't get image from cam1." << endl;
+	  cout << "Can't get image from cam." << endl;
 	  return 0;
 	}
 
@@ -160,9 +160,9 @@ int check_stereo(int argc, char* argv[])
   //cout << cam1.getCameraSN() << endl;
   
   cv::FileStorage fs;
-  fs.open("../data/stereo_extrinsics.yml",FileStorage::READ);
-  Mat K0, D0, K1, D1, R, T, E, F;
-  Rect roi1, roi2;
+  fs.open("../data/stereo_extrinsics.yml",cv::FileStorage::READ);
+  cv::Mat K0, D0, K1, D1, R, T, E, F;
+  cv::Rect roi1, roi2;
   
   fs["K0"] >> K0;
   fs["D0"] >> D0;
@@ -191,14 +191,14 @@ int check_stereo(int argc, char* argv[])
   frame0 = cam0.readImage();
   if(frame0.empty())
     {
-      cout << "Can't get image from cam0." << endl;
+      cout << "Can't get image from cam." << endl;
       return 0;
     }
   
   frame1 = cam1.readImage();
   if(frame1.empty())
     {
-      cout << "Can't get image from cam1." << endl;
+      cout << "Can't get image from cam." << endl;
       return 0;
     }
         
@@ -211,7 +211,8 @@ int check_stereo(int argc, char* argv[])
   Mat map01, map02, map11, map12;
   //initUndistortRectifyMap(K0,D0,R,K0,frame0.size(),CV_32FC1,map01,map02);
   //initUndistortRectifyMap(K1,D1,R,K1,frame1.size(),CV_32FC1,map11,map12);
-  cv::initUndistortRectifyMap(K0, D0, R0, P0, frame0.size(), CV_32FC1, map01, map02);
+  cv::initUndistortRectifyMap(K0, D0, R0, P0, frame0.size(), CV_32FC1, map01,
+			      map02);
   cv::initUndistortRectifyMap(K1, D1, R1, P1, frame1.size(), CV_32FC1, map11, map12);
 
   cout << "Q " << Q << endl << endl;
@@ -221,11 +222,16 @@ int check_stereo(int argc, char* argv[])
       frame0 = cam0.readImage();
       if(frame0.empty())
 	{
-	  cout << "Can't get image from cam0." << endl;
+	  cout << "Can't get image from cam." << endl;
 	  return 0;
-    }
+	}
       
       frame1 = cam1.readImage();
+      if(frame0.empty())
+	{
+	  cout << "Can't get image from cam." << endl;
+	  return 0;
+	}
       
       cv::remap(frame0, frame0, map01, map02, INTER_LINEAR);
       cv::remap(frame1, frame1, map11, map12, INTER_LINEAR);
@@ -322,7 +328,7 @@ int check_mono(int argc, char* argv[])
   int LN=10;
   
   cv::namedWindow("Mono Check", cv::WINDOW_AUTOSIZE);
-  cv::moveWindow("Mono Check", 200, 100);
+  cv::moveWindow("Mono Check", 300, 100);
   
   while(true)
     {
@@ -506,7 +512,7 @@ int stereo_calibrate(int argc,char* argv[])
     {
       for(int i=0; i < CW; i++)
 	{
-      object.push_back(cv::Point3f(i*SQ_SIZE, j*SQ_SIZE, 0.0f));
+	  object.push_back(cv::Point3f(i*SQ_SIZE, j*SQ_SIZE, 0.0f));
     }
   }
   

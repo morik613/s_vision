@@ -10,10 +10,10 @@ add_executable(calib
 	src/FlyCap2CV.cpp
 	)
 
-#add_executable(stereo 
-#	src/stereo.cpp
-#	src/FlyCap2CV.cpp
-#	)
+add_executable(stereo 
+	src/stereo.cpp
+	src/FlyCap2CV.cpp
+	)
 
 include_directories(
   include
@@ -26,7 +26,7 @@ target_link_libraries(calib
   flycapture
   )
 
-#target_link_libraries(stereo
-#	${OpenCV_LIBRARIES}
-#  flycapture
+target_link_libraries(stereo
+	${OpenCV_LIBRARIES}
+  flycapture
 )
